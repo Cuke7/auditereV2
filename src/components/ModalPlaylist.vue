@@ -5,7 +5,7 @@
             <label for="my-modal-3" class="bg-primary btn btn-sm btn-circle absolute right-4 top-4">✕</label>
             <div class="flex">
                 <input v-model="playlistUrl" placeholder="Youtube playlist url" type="text" class="w-full font-mono rounded-lg bg-secondary bg-opacity-30 p-2" />
-                <button v-if="!store.playlistIsLoading" @click="store.loadPlaylist(playlistUrl)" class="ml-4"><PlusIcon class="h-10 w-10 bg-secondary bg-opacity-30 btn-circle p-2" /></button>
+                <button v-if="!store.playlistIsLoading" @click="loadPlaylist()" class="ml-4"><PlusIcon class="h-10 w-10 bg-secondary bg-opacity-30 btn-circle p-2" /></button>
                 <Loader v-else />
             </div>
             <div class="mt-8">
@@ -35,9 +35,21 @@ const playlistModalElement = ref<HTMLInputElement | null>(null);
 const playlistUrl = ref("");
 // const playlistUrl = ref("https://www.youtube.com/playlist?list=PLY80CRqvcxEXtmbMSJDqIK4uk_FB3j5I8");
 
-const playlistClicked = (playlist: Playlist) => {
-    if (playlistModalElement.value) playlistModalElement.value.checked = false;
-    store.currentPlaylist = playlist;
-    store.loadSong(playlist.playlist[0]);
+const playlistClicked = async (playlist: Playlist) => {
+    let updatedPlaylist = await store.loadPlaylist(playlist.url);
+    if (updatedPlaylist) {
+        if (playlistModalElement.value) playlistModalElement.value.checked = false;
+        store.currentPlaylist = updatedPlaylist;
+        store.loadSong(updatedPlaylist.playlist[0]);
+    }
+};
+
+const loadPlaylist = async () => {
+    let playlist = await store.loadPlaylist(playlistUrl.value);
+    if (playlist) {
+        store.savedPlaylists.push(playlist);
+        localStorage.setItem("playlists", JSON.stringify(store.savedPlaylists));
+        playlistUrl.value = "";
+    }
 };
 </script>

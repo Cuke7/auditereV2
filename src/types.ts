@@ -1,6 +1,7 @@
 export type Playlist = {
     name: string;
     playlist: Song[];
+    url: string
 }
 
 export type Song = {

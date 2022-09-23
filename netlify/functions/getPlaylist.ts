@@ -38,7 +38,7 @@ const handler: Handler = async (event, context) => {
     }
     return {
         statusCode: 200,
-        body: JSON.stringify({ name: ytdata.metadata.playlistMetadataRenderer.title, playlist: playlist }),
+        body: JSON.stringify({ name: ytdata.metadata.playlistMetadataRenderer.title, playlist: playlist, url: playlistUrl }),
     };
 };
 

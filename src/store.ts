@@ -4,7 +4,7 @@ import axios from "axios";
 
 export const store = reactive({
     savedPlaylists: [] as Playlist[],
-    currentPlaylist: { name: "", playlist: [] as Song[] },
+    currentPlaylist: { name: "", playlist: [] as Song[], url: "" },
     currentSong: {
         title: "No song loaded.",
         artist: "",
@@ -32,10 +32,10 @@ export const store = reactive({
         if (response.data == 'Incorrect URL') {
             store.playlistIsLoading = false;
             console.error("Wrong url")
+            return null
         } else {
             store.playlistIsLoading = false;
-            store.savedPlaylists.push(response.data);
-            localStorage.setItem("playlists", JSON.stringify(store.savedPlaylists));
+            return response.data
         }
     }
 })

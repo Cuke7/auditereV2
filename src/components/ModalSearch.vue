@@ -79,7 +79,7 @@ const songClicked = (song: Song, index: number) => {
     store.songIndex = index;
     if (searchModalElement.value) searchModalElement.value.checked = false;
     store.loadSong(song);
-    store.currentPlaylist = { name: search.value, playlist: [song] };
+    store.currentPlaylist = { name: search.value, playlist: [song], url: "" };
     store.songIndex = 0;
 };
 </script>

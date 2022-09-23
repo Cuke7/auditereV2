@@ -10,6 +10,7 @@ export default defineConfig({
       name: 'Auditere2',
       short_name: 'Auditere2',
       background_color: "#000000",
+      theme_color: "#000000",
       icons: [
         {
           src: 'bird.png',
