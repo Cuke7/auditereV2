@@ -3,10 +3,10 @@
     <div class="modal">
         <div class="modal-box relative h-full p-4 pt-16">
             <label for="my-modal-1" class="bg-primary btn btn-sm btn-circle absolute right-4 top-4">✕</label>
-            <div class="overflow-scroll mt-4">
+            <div class="overflow-scroll">
                 <div class="flex">
                     <input v-model="search" placeholder="Search on youtube" type="text" class="h-10 w-full p-2 bg-secondary bg-opacity-30 rounded-lg full font-mono" />
-                    <button @click="getSearch(search)" :disabled="search.length < 2" class="ml-4" v-if="!store.searchIsLoading">
+                    <button @click="getSearch" :disabled="search.length < 2" class="ml-4" v-if="!store.searchIsLoading">
                         <MagnifyingGlassIcon v-if="search.length < 2" class="h-10 w-10 bg-secondary btn-circle p-2 opacity-20" />
                         <MagnifyingGlassIcon v-else class="h-10 w-10 bg-secondary btn-circle p-2 bg-opacity-30" />
                     </button>
@@ -20,15 +20,7 @@
                     <hr />
                 </div> -->
                 <div @click="songClicked(song, index)" v-for="(song, index) in searchResults" :key="index" class="flex my-4">
-                    <img class="w-24 rounded" :src="song.artwork" alt="" />
-                    <div class="ml-4">
-                        <div class="text-sm">
-                            {{ song.title }}
-                        </div>
-                        <div class="text-sm text-gray-400">
-                            {{ song.artist }}
-                        </div>
-                    </div>
+                    <song-component :song="song" />
                 </div>
             </div>
         </div>
@@ -45,6 +37,7 @@ import axios from "axios";
 import { Song } from "../types";
 import { store } from "../store";
 import Loader from "./Loader.vue";
+import SongComponent from "./SongComponent.vue";
 
 const searchModalElement = ref<HTMLInputElement | null>(null);
 const search = ref("");
@@ -65,12 +58,10 @@ const searchResults = ref([] as Song[]);
 //     }
 // });
 
-const getSearch = async (searchValue: string) => {
+const getSearch = async () => {
     store.searchIsLoading = true;
-    search.value = searchValue;
     suggestions.value = [];
-    let { data } = await axios.get("/.netlify/functions/getSearch?search=" + searchValue);
-    console.log(data);
+    let { data } = await axios.get("/.netlify/functions/getSearch?search=" + search.value);
     searchResults.value = data;
     store.searchIsLoading = false;
 };
@@ -81,5 +72,6 @@ const songClicked = (song: Song, index: number) => {
     store.loadSong(song);
     store.currentPlaylist = { name: search.value, playlist: [song], url: "" };
     store.songIndex = 0;
+    search.value = "";
 };
 </script>

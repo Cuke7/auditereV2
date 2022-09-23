@@ -37,5 +37,9 @@ export const store = reactive({
             store.playlistIsLoading = false;
             return response.data
         }
+    },
+    removePlaylist(playlist: Playlist) {
+        store.savedPlaylists.splice(store.savedPlaylists.indexOf(playlist), 1)
+        localStorage.setItem("playlists", JSON.stringify(store.savedPlaylists));
     }
 })

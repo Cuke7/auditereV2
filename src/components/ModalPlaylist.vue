@@ -11,7 +11,10 @@
             <div class="mt-8">
                 <div v-for="(playlist, index) in store.savedPlaylists" :key="index" class="flex justify-between items-center bg-secondary rounded-lg bg-opacity-30 p-4 my-4">
                     <div class="font-bold txt-lg">{{ playlist.name }}</div>
-                    <PlayIcon class="w-8 h-8" @click="playlistClicked(playlist)" />
+                    <div class="flex items-center">
+                        <TrashIcon class="w-6 h-6 mr-12" @click="store.removePlaylist(playlist)" />
+                        <PlayIcon class="w-8 h-8" @click="playlistClicked(playlist)" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -30,6 +33,7 @@ import { PlusIcon } from "@heroicons/vue/24/solid";
 import axios from "axios";
 import { PlayIcon } from "@heroicons/vue/24/solid";
 import { MusicalNoteIcon } from "@heroicons/vue/24/solid";
+import { TrashIcon } from "@heroicons/vue/24/solid";
 
 const playlistModalElement = ref<HTMLInputElement | null>(null);
 const playlistUrl = ref("");
