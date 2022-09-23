@@ -6,15 +6,7 @@
             <label for="queueModal" class="bg-primary btn btn-sm btn-circle absolute right-4 top-4">✕</label>
             <div class="overflow-scroll mt-4">
                 <div @click="songClicked(song, index)" v-for="(song, index) in store.currentPlaylist.playlist" :key="index" class="flex my-4">
-                    <img class="w-24 rounded" :src="song.artwork" alt="" />
-                    <div class="ml-4">
-                        <div class="text-sm">
-                            {{ song.title }}
-                        </div>
-                        <div class="text-sm text-gray-400">
-                            {{ song.artist }}
-                        </div>
-                    </div>
+                    <song-component :song="song" />
                 </div>
             </div>
         </div>
@@ -29,6 +21,7 @@ import { ref } from "vue";
 import { QueueListIcon } from "@heroicons/vue/24/solid";
 import { store } from "../store";
 import { Song } from "../types";
+import SongComponent from "./SongComponent.vue";
 
 const queueModal = ref<HTMLInputElement | null>(null);
 
