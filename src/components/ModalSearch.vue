@@ -47,7 +47,7 @@ import { store } from "../store";
 import Loader from "./Loader.vue";
 
 const searchModalElement = ref<HTMLInputElement | null>(null);
-const search = ref("Cascada");
+const search = ref("");
 const suggestions = ref([]);
 const searchResults = ref([] as Song[]);
 
