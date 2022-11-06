@@ -1,7 +1,7 @@
 <template>
     <input type="checkbox" id="my-modal-1" class="modal-toggle" v-model="open" />
 
-    <label for="my-modal-1" class="modal cursor-pointer modal-bottom">
+    <label for="my-modal-1" class="modal cursor-pointer">
         <label class="modal-box relative bg-black" for="">
             <div class="flex flex-col justify-center items-center">
                 <input @keyup.enter="getSearch" ref="input" v-model="search" placeholder="Search on youtube" type="text" class="h-10 w-full p-2 border-2 border-white bg-black rounded-lg full font-mono" />
