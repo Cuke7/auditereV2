@@ -1,43 +1,35 @@
 <template>
-    <input ref="searchModalElement" type="checkbox" id="my-modal-1" class="modal-toggle" />
-    <div class="modal">
-        <div class="modal-box relative h-full p-4 pt-16">
-            <label for="my-modal-1" class="bg-primary btn btn-sm btn-circle absolute right-4 top-4">✕</label>
-            <div class="overflow-scroll">
-                <div class="flex">
-                    <input v-model="search" placeholder="Search on youtube" type="text" class="h-10 w-full p-2 bg-secondary bg-opacity-30 rounded-lg full font-mono" />
-                    <button @click="getSearch" :disabled="search.length < 2" class="ml-4" v-if="!store.searchIsLoading">
-                        <MagnifyingGlassIcon v-if="search.length < 2" class="h-10 w-10 bg-secondary btn-circle p-2 opacity-20" />
-                        <MagnifyingGlassIcon v-else class="h-10 w-10 bg-secondary btn-circle p-2 bg-opacity-30" />
-                    </button>
-                    <Loader v-else />
-                </div>
+    <input type="checkbox" id="my-modal-1" class="modal-toggle" v-model="open" />
 
-                <!-- <div class="mx-1" v-for="(suggestion, index) in suggestions" :key="index">
-                    <div class="my-2 text-gray-400" @click="getSearch(suggestion)">
-                        {{ suggestion }}
-                    </div>
-                    <hr />
-                </div> -->
-                <div @click="songClicked(song, index)" v-for="(song, index) in searchResults" :key="index" class="flex my-4">
-                    <song-component :song="song" />
-                </div>
+    <label for="my-modal-1" class="modal cursor-pointer modal-bottom">
+        <label class="modal-box relative bg-black" for="">
+            <div class="flex flex-col justify-center items-center">
+                <input @keyup.enter="getSearch" ref="input" v-model="search" placeholder="Search on youtube" type="text" class="h-10 w-full p-2 border-2 border-white bg-black rounded-lg full font-mono" />
+
+                <Loader class="mt-4" v-if="store.searchIsLoading" />
             </div>
-        </div>
-    </div>
-    <label for="my-modal-1" class="modal-button">
-        <MagnifyingGlassIcon class="h-6 w-6 mx-4 text-primary" />
+
+            <div @click="songClicked(song, index)" v-for="(song, index) in searchResults" :key="index" class="flex my-4">
+                <song-component :song="song" />
+            </div>
+        </label>
     </label>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { MagnifyingGlassIcon } from "@heroicons/vue/24/solid";
+import { ref, watch } from "vue";
 import axios from "axios";
 import { Song } from "../types";
 import { store } from "../store";
 import Loader from "./Loader.vue";
 import SongComponent from "./SongComponent.vue";
+
+const open = ref(false);
+const input = ref<HTMLInputElement | null>(null);
+
+watch(open, () => {
+    input.value?.focus();
+});
 
 const searchModalElement = ref<HTMLInputElement | null>(null);
 const search = ref("");
@@ -67,6 +59,7 @@ const getSearch = async () => {
 };
 
 const songClicked = (song: Song, index: number) => {
+    open.value = false;
     store.songIndex = index;
     if (searchModalElement.value) searchModalElement.value.checked = false;
     store.loadSong(song);

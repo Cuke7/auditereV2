@@ -1,54 +1,42 @@
 <template>
-    <div data-theme="halloween" class="bg-black flex-col flex h-screen">
-        <div class="p-4 flex items-center justify-between">
+    <div data-theme="halloween" class="bg-slate-800 flex-col flex h-screen" id="app">
+        <!-- <img class="absolute blur-xl h-full scale-100 -z-1" src="/bird.png" alt="" /> -->
+        <!-- <div class="p-4 flex">
             <div class="text-2xl">Auditere 🎧</div>
-            <div class="flex">
-                <modal-search></modal-search>
-                <modal-queue></modal-queue>
-                <modal-playlist></modal-playlist>
-            </div>
-        </div>
-        <div class="flex-1 flex mt-8 flex-col items-center">
-            <div class="flex justify-center">
-                <img :src="store.currentSong.artwork" class="max-h-[225px] rounded-lg" />
-            </div>
-            <div class="w-[300px] text-white font-bold mt-8">{{ store.currentSong.title }}</div>
-            <div class="w-[300px] text-gray-400 font-bold">{{ store.currentSong.artist }}</div>
-            <div class="w-4/5" v-if="!store.songIsLoading">
-                <input v-model="currentTime" type="range" min="0" :max="store.duration" class="range-primary range range-xs mt-8" />
-                <div class="flex justify-between">
-                    <div class="font-mono">{{ formatTime(currentTime) }}</div>
-                    <div class="font-mono">{{ formatTime(store.duration) }}</div>
-                </div>
-            </div>
-            <div class="w-4/5 mt-8 flex justify-around" v-if="!store.songIsLoading">
-                <BackwardIcon v-if="store.songIndex == 0" class="h-12 w-12 bg-secondary rounded-full p-3 opacity-40" />
-                <BackwardIcon v-else @click="nextSong(false)" class="h-12 w-12 bg-secondary rounded-full p-3" />
+            <div class="flex"> -->
+        <!-- <modal-search></modal-search>
+                <modal-queue></modal-queue> -->
+        <!-- </div>
+        </div> -->
+        <!-- <div class="text-2xl flex">Auditere 🎧</div> -->
+        <Player class="flex flex-1 py-4" />
 
-                <PlayIcon @click="play(true)" v-if="!store.isPlaying" class="h-12 w-12 bg-primary rounded-full p-3" />
-                <PauseIcon @click="play(false)" v-else class="h-12 w-12 bg-primary rounded-full p-3" />
-
-                <ForwardIcon v-if="store.songIndex == store.currentPlaylist.playlist.length - 1" class="h-12 w-12 bg-secondary rounded-full p-3 opacity-40" />
-                <ForwardIcon v-else @click="nextSong(true)" class="h-12 w-12 bg-secondary rounded-full p-3" />
-            </div>
-            <Loader v-else class="mt-16" />
-            <audio @ended="nextSong(true)" class="hidden" ref="audio" controls @canplaythrough="onCanplaythrough" @timeupdate="timeUpdate" @durationchange="durationUpdate"></audio>
+        <div class="bg-transparent shadow-lg shadow-white p-6 flex justify-around">
+            <label for="my-modal-1" class="modal-button">
+                <MagnifyingGlassIcon class="h-6 w-6 mx-4 text-primary" />
+            </label>
+            <label v-if="store.currentPlaylist.playlist.length > 0" for="queueModal" class="modal-button">
+                <QueueListIcon class="h-6 w-6 mx-4 text-primary" />
+            </label>
+            <label for="my-modal-4" class="modal-button"> <MusicalNoteIcon class="h-6 w-6 mx-4 text-primary" /></label>
         </div>
+        <audio @ended="nextSong(true)" class="hidden" ref="audio" controls @canplaythrough="onCanplaythrough" @timeupdate="timeUpdate" @durationchange="durationUpdate"></audio>
+        <modal-search></modal-search>
+        <modal-queue></modal-queue>
+        <modal-playlist></modal-playlist>
     </div>
 </template>
 
 <script setup lang="ts">
-import { PlayIcon } from "@heroicons/vue/24/solid";
-import { PauseIcon } from "@heroicons/vue/24/solid";
-import { ForwardIcon } from "@heroicons/vue/24/solid";
-import { BackwardIcon } from "@heroicons/vue/24/solid";
 import { ref, watch, toRef } from "vue";
-import Loader from "./components/Loader.vue";
 import { store } from "./store";
-import { Playlist, Song } from "./types";
 import ModalPlaylist from "./components/ModalPlaylist.vue";
 import ModalQueue from "./components/ModalQueue.vue";
 import ModalSearch from "./components/ModalSearch.vue";
+import Player from "./components/Player.vue";
+import { MusicalNoteIcon } from "@heroicons/vue/24/solid";
+import { MagnifyingGlassIcon } from "@heroicons/vue/24/solid";
+import { QueueListIcon } from "@heroicons/vue/24/solid";
 
 const audio = ref<HTMLAudioElement | null>(null);
 watch(
@@ -124,5 +112,9 @@ function formatTime(seconds: any) {
 <style>
 input {
     outline: none;
+}
+
+#app {
+    background-image: radial-gradient(circle, #1e293b, #201f2c, #1c161e, #130d11, #000000);
 }
 </style>
